@@ -36,17 +36,10 @@ export const DataProvider = ({ children }) => {
   const restroData = JSON.parse(localStorage.getItem("data"));
 
   console.log("restroData", restroData);
-
-  const { cuisineTypes, restaurants } = restroData;
-
-  let initialState = {
-    cuisineTypes: [...cuisineData],
-    restaurants: [...restaurantsData],
-  };
-  const [state, dispatch] = useReducer(DataReducer, initialState);
+  const [state, dispatch] = useReducer(DataReducer, restroData);
 
   const fetchData = () => {
-    dispatch({ type: "InitialDataFetch", payload: initialState });
+    dispatch({ type: "InitialDataFetch", payload: restroData });
   };
 
   useEffect(() => {
