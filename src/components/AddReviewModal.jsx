@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { BiX } from 'react-icons/bi';
 import { DataContext } from '../context/DataContext';
 import '../css/Modal.css';
@@ -7,34 +7,50 @@ export default function AddReviewModal({ closeModal, currentRestro }) {
 	const [rating, setRating] = useState('');
 	const [comment, setComment] = useState('');
 	const { state, dispatch } = useContext(DataContext);
+	const [updatedRestro, setUpdatedRestro] = useState(currentRestro);
 
-	const handleRatingChange = e => {
-		setRating(e.target.value);
-	};
+	const handleSubmit = e => {
+		e.preventDefault();
 
-	const handleCommentChange = e => {
-		setComment(e.target.value);
-	};
-
-	let updatedRestaurent = {
-		...currentRestro,
-		ratings: [
+		const updatedRatings = [
 			...currentRestro.ratings,
 			{
 				rating: rating,
 				comment: comment,
-				revName: 'Riya',
+				revName: 'You',
 				pp:
 					'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5tbKdv1HDbAjPc526SK0yDZuoOmaaOyGNoj_e1q3ngruK2bTqzub3&s=0'
 			}
-		]
+		];
+
+		const updatedRestroWithRatings = {
+			...updatedRestro,
+			ratings: updatedRatings
+		};
+		const avgRating = calculateAverageRating(updatedRatings);
+
+		const updatedRestroWithAvgRating = {
+			...updatedRestroWithRatings,
+			averageRating: avgRating
+		};
+
+		setUpdatedRestro(updatedRestroWithAvgRating);
+		dispatch({ type: 'AddReview', payload: updatedRestroWithAvgRating });
+		closeModal();
 	};
 
-	const handleSubmit = e => {
-		e.preventDefault();
-		dispatch({ type: 'AddReview', payload: updatedRestaurent });
-		console.log('updatedRestaurent', updatedRestaurent);
-		closeModal();
+	useEffect(() => {
+		setUpdatedRestro(currentRestro);
+	}, [currentRestro]);
+
+	const calculateAverageRating = ratings => {
+		if (ratings.length === 0) return 0;
+
+		const sumOfRatings = ratings.reduce(
+			(acc, curr) => acc + parseInt(curr.rating),
+			0
+		);
+		return sumOfRatings / ratings.length;
 	};
 
 	return (
@@ -48,7 +64,11 @@ export default function AddReviewModal({ closeModal, currentRestro }) {
 					<form onSubmit={handleSubmit}>
 						<div className="form-group">
 							<label htmlFor="rating">Rating:</label>
-							<select id="rating" value={rating} onChange={handleRatingChange}>
+							<select
+								id="rating"
+								value={rating}
+								onChange={e => setRating(e.target.value)}
+							>
 								<option value="">Select rating</option>
 								<option value="1">1</option>
 								<option value="2">2</option>
@@ -62,7 +82,7 @@ export default function AddReviewModal({ closeModal, currentRestro }) {
 							<textarea
 								id="comment"
 								value={comment}
-								onChange={handleCommentChange}
+								onChange={e => setComment(e.target.value)}
 							></textarea>
 						</div>
 						<button type="submit">Submit</button>

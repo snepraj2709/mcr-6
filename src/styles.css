@@ -8,7 +8,7 @@
 
 .menu-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   grid-gap: 10px;
   cursor: pointer;
 }
@@ -34,6 +34,7 @@
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 5px;
+  align-items: center;
 }
 
 .menu-detail span {
@@ -45,6 +46,9 @@
   font-size: 14px;
   margin-top: 1px;
   color: #6666;
+}
+.menu-detail h2 {
+  margin-left: 40px;
 }
 
 /* restaurant page css */
@@ -59,7 +63,7 @@
 }
 
 .primary-button {
-  background-color: blue;
+  background-color: orangered;
   color: white;
   width: auto;
   height: 60px;
@@ -69,9 +73,36 @@
   font-size: 16px;
   cursor: pointer;
 }
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.secondary-button {
+  background-color: orangered;
+  color: white;
+  margin: 10px;
+  width: auto;
+  height: 35px;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
 /* restaurent page css */
+.rating-container {
+  border: 1px solid black;
+  margin: 10px 40px;
+  padding: 0px 10px;
+  align-items: center;
+  max-width: 400px;
+}
+
 .rating-detail {
   display: flex;
+  align-items: center;
+
   justify-content: space-between;
 }
 

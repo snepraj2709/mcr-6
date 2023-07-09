@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { BiArrowBack } from 'react-icons/bi';
 import { AiFillStar } from 'react-icons/ai';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -9,20 +9,11 @@ export default function Restaurant() {
 	const navigate = useNavigate();
 	const [modal, setModal] = useState(false);
 	const { id } = useParams();
-	const { state, dispatch } = useContext(DataContext);
-	const currentRestro = state.restaurants.find(
-		restro => restro.id === parseInt(id)
-	);
+	const { state } = useContext(DataContext);
+	let currentRestro = state.restaurants.find(restro => restro.id == id);
+	const [current, setCurrent] = useState(currentRestro);
 
-	const {
-		name,
-		cuisine_id,
-		address,
-		menu,
-		ratings,
-		averageRating,
-		description
-	} = currentRestro;
+	const { name, address, menu, ratings, averageRating, description } = current;
 
 	const openModal = () => {
 		setModal(true);
@@ -31,6 +22,12 @@ export default function Restaurant() {
 	const closeModal = () => {
 		setModal(false);
 	};
+
+	useEffect(() => {
+		const currentRestro = state.restaurants.find(restro => restro.id == id);
+
+		setCurrent(currentRestro);
+	}, [modal]);
 
 	return (
 		<div>
@@ -58,7 +55,7 @@ export default function Restaurant() {
 			<div className="menu-detail">
 				<h2>Reviews</h2>
 				{ratings.map(({ rating, comment, revName, pp }) => (
-					<div>
+					<div className="rating-container">
 						<div className="rating-detail">
 							<div className="rating-user">
 								<img src={pp} alt={revName} />
@@ -70,7 +67,6 @@ export default function Restaurant() {
 							</h4>
 						</div>
 						<p>{comment}</p>
-						<hr />
 					</div>
 				))}
 			</div>

@@ -7,12 +7,16 @@ export default function RestaurantMenu() {
 
 	return (
 		<div>
-			{state?.restaurants?.map(restaurant => (
-				<div key={restaurant.id}>
-					<h2>Dishes by {restaurant.name}</h2>
-					<MenuItem restaurant={restaurant} menu={restaurant.menu} />
-				</div>
-			))}
+			{state?.restaurants?.length > 0 ? (
+				state?.restaurants.map(restaurant => (
+					<div key={restaurant.id}>
+						<h2>Dishes by {restaurant.name}</h2>
+						<MenuItem restaurant={restaurant} menu={restaurant.menu} />
+					</div>
+				))
+			) : (
+				<div>No items</div>
+			)}
 		</div>
 	);
 }
